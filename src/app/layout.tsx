@@ -12,9 +12,23 @@ import CartNavLink from "./components/CartNavLink";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Finix Payment Example Store",
-  description: "Example e-commerce store demonstrating Finix payment integration",
-};
+  title: 'Finix Accept Payment Example Store',
+  description: 'Example e-commerce application showcasing Finix payment integration with Checkout Forms and Tokenization Form products.',
+  keywords: ['Finix', 'payments', 'e-commerce', 'checkout', 'tokenization', 'example', 'integration'],
+  openGraph: {
+    title: 'Finix Accept Payment Example Store',
+    description: 'Learn how to integrate Finix payments into your e-commerce platform with our example application.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Finix Accept Payment Example Store',
+    description: 'Example e-commerce application with Finix payment integration.',
+  },
+  authors: [{ name: 'Finix' }],
+  creator: 'Finix',
+  publisher: 'Finix',
+}
 
 export default function RootLayout({
   children,
