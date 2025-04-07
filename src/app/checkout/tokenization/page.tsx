@@ -23,9 +23,9 @@ export default function TokenizationPage() {
   const total = subtotal + tax;
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col lg:flex-row min-h-screen">
       {/* Left Column - Payment Form */}
-      <div className="flex-1 w-2/3 mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full lg:w-2/3 mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-[600px] m-auto">
           {/* Breadcrumb */}
           <div className="mb-8">
@@ -65,7 +65,7 @@ export default function TokenizationPage() {
       </div>
 
       {/* Right Column - Order Summary */}
-      <div className="w-1/3 bg-gray-50 dark:bg-gray-800 p-8 border-l border-gray-300 dark:border-gray-700">
+      <div className="w-full lg:w-1/3 bg-gray-50 dark:bg-gray-800 p-8 border-t lg:border-t-0 lg:border-l border-gray-300 dark:border-gray-700">
         <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">Order Summary</h2>
         
         {/* Cart Items */}
