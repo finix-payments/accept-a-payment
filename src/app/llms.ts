@@ -1,7 +1,3 @@
-// src/app/llms.ts
-import { MetadataRoute } from 'next'
-
-// Define a custom type for LLM metadata since Next.js doesn't have a built-in type for this
 type LLMMetadata = {
   name: string
   description: string

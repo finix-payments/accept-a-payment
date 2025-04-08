@@ -1,22 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { FinixForm } from '@/types/global';
+import { FinixForm, PaymentFormProps, FormState, BinInformation } from '@/types/global';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/app/context/CartContext';
 import { paymentFormCode } from './inspector/code/PaymentFormCode';
-
-interface PaymentFormProps {
-  onSuccess?: (data: any) => void;
-  shippingAddress: {
-    line1: string;
-    line2: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-  };
-}
 
 export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormProps) {
   const finixForm = useRef<FinixForm | null>(null);
@@ -40,7 +28,7 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
         showAddress: true,
         requiredFields: ['address_line1', 'city', 'state', 'postal_code'],
         // onUpdate function required when using custom submit buttons to properly enable/disable them
-        onUpdate: (state: any, binInformation: any, hasErrors: boolean) => {
+        onUpdate: (state: FormState, binInformation: BinInformation, hasErrors: boolean) => {
           setIsFormValid(!hasErrors);
         },
         // optional styles
@@ -118,7 +106,7 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
       handleTokenReceived(token as string);
     } catch (err) {
       setIsProcessing(false);
-      setError('Tokenization failed. Please try again.');
+      setError('Tokenization failed: ' + (err as Error).message);
     }
   };
 

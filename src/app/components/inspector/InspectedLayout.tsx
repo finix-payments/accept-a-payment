@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { withInspector } from './withInspector';
 import InspectorButton from './InspectorButton';
 import InspectorOverlay from './InspectorOverlay';
@@ -11,16 +12,16 @@ const BaseLayout = ({ children }: { children: React.ReactNode }) => (
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <a href="/" className="text-xl font-bold text-gray-900">
+              <Link href="/" className="text-xl font-bold text-gray-900">
                 Finix Store
-              </a>
+              </Link>
             </div>
           </div>
           <div className="flex items-center space-x-4">
             <InspectorButton />
-            <a href="/cart" className="text-gray-600 hover:text-gray-900">
+            <Link href="/cart" className="text-gray-600 hover:text-gray-900">
               Cart
-            </a>
+            </Link>
           </div>
         </div>
       </div>

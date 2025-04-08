@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
-import { useInspector } from '../context/InspectorContext';
 import { productCardCode } from './inspector/code/ProductCardCode';
 
 interface ProductCardProps {
@@ -15,7 +14,6 @@ interface ProductCardProps {
 
 export default function ProductCard({ id, name, price, image, description }: ProductCardProps) {
   const { addItem, items } = useCart();
-  const { isInspectorMode } = useInspector();
 
   const cartItem = items.find(item => item.id === id);
   const quantity = cartItem?.quantity || 0;
