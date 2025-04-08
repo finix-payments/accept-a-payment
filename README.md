@@ -7,19 +7,19 @@ This is an example e-commerce application that demonstrates how to integrate Fin
 
 ## Features
 
-- Modern Next.js 14 application with TypeScript
-- Beautiful UI using Tailwind CSS
+- Next.js 14 e-commerce example with TypeScript
+- Basic UI using Tailwind CSS
 - Product catalog with example items
 - Shopping cart functionality
 - Two payment integration methods
-- Basic API structure for payment processing
+- Simple API example for payment processing
 
 ## Getting Started
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/finix-take-payment-example.git
-cd finix-take-payment-example
+git clone https://github.com/finix-payments/accept-a-payment.git
+cd accept-a-payment
 ```
 
 2. Install dependencies:
@@ -27,41 +27,12 @@ cd finix-take-payment-example
 npm install
 ```
 
-3. Create a `.env.local` file in the root directory and add your Finix API credentials and merchant ID:
-```env
-FINIX_API_KEY=USfdccsr1Z5iVbXDyYt7hjZZ
-FINIX_API_SECRET=313636f3-fac2-45a7-bff7-a334b93e7bda
-FINIX_API_URL=https://finix.sandbox-payments-api.com
-FINIX_MERCHANT_ID=MUmfEGv5bMpSJ9k5TFRUjkmm
-PUBLIC_BASE_URL=http://localhost:3000 
-```
-
-4. Run the development server:
+3. Run the development server:
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── api/
-│   │   └── payments/
-│   │       └── route.ts         # API route for payment processing
-│   │   ├── checkout/
-│   │   │   ├── finix-hosted/
-│   │   │   │   └── page.tsx        # Finix Hosted Checkout page
-│   │   │   └── tokenization/
-│   │   │       └── page.tsx        # Tokenization Form page
-│   │   ├── cart/
-│   │   │   └── page.tsx            # Shopping cart page
-│   │   ├── layout.tsx              # Root layout with navigation
-│   │   └── page.tsx                # Product catalog page
-│   └── components/                 # Reusable components (to be added)
-```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Payment Integration Methods
 
@@ -84,17 +55,6 @@ This method embeds the Finix Tokenization Form directly in the website. The flow
 4. Form creates a payment token
 5. Token is sent to our API to process the payment
 6. Customer sees success/failure message
-
-## Development
-
-This is a work in progress. The following features are planned:
-
-- [ ] Add state management for the shopping cart
-- [ ] Implement actual Finix API integration
-- [ ] Add error handling and validation
-- [ ] Add loading states and animations
-- [ ] Add unit tests
-- [ ] Add documentation for API endpoints
 
 ## Contributing
 
