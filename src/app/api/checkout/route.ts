@@ -76,10 +76,10 @@ export async function POST(request: NextRequest) {
       },
       // add your branding here
       branding: {
-        brand_color: '#fbe5d0',
-        accent_color: '#ff4838',
-        logo: 'https://s3.amazonaws.com/customer-uploaded-assets-prod/04-12-2023-05_13_37_ACME_logo-01%20%281%29.png',
-        icon: 'https://s3.amazonaws.com/customer-uploaded-assets-prod/04-12-2023-05_13_37_ACME_logo-01%20%281%29.png',
+        brand_color: '#FFF',
+        accent_color: '#155dfc',
+        logo: 'https://s3-us-west-2.amazonaws.com/payments-dashboard-assets/dashboard.finixpayments.com/finix-logo-v2-black.png',
+        icon: 'https://s3-us-west-2.amazonaws.com/payments-dashboard-assets/dashboard.finixpayments.com/finix-logo-v2-black.png',
       },
     };
 
