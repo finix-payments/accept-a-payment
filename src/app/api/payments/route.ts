@@ -13,22 +13,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate environment variables
-    if (!process.env.FINIX_API_KEY || !process.env.FINIX_API_SECRET || !process.env.FINIX_MERCHANT_ID) {
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      );
-    }
-
     // Set up headers for Finix API requests
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Basic ${Buffer.from(`${process.env.FINIX_API_KEY}:${process.env.FINIX_API_SECRET}`).toString('base64')}`
+      'Authorization': `Basic ${Buffer.from('USfdccsr1Z5iVbXDyYt7hjZZ:313636f3-fac2-45a7-bff7-a334b93e7bda').toString('base64')}` // use your API key and secret
     }
 
     // Create Identity request to Finix API for the Buyer
-    const identityResponse = await fetch(`${process.env.FINIX_API_URL}/identities`, {
+    const identityResponse = await fetch('https://finix.sandbox-payments-api.com/identities', {
       method: 'POST',
       headers,
       body: JSON.stringify({
@@ -44,7 +36,7 @@ export async function POST(request: NextRequest) {
     const identity = await identityResponse.json();
 
     // Claim the token by creating a Payment Instrument request to Finix API
-    const paymentInstrumentResponse = await fetch(`${process.env.FINIX_API_URL}/payment_instruments`, {
+    const paymentInstrumentResponse = await fetch('https://finix.sandbox-payments-api.com/payment_instruments', {
       method: 'POST',
       headers,
       body: JSON.stringify({
@@ -62,17 +54,14 @@ export async function POST(request: NextRequest) {
     const paymentInstrument = await paymentInstrumentResponse.json();
 
     // Create payment request to Finix API
-    const response = await fetch(`${process.env.FINIX_API_URL}/transfers`, {
+    const response = await fetch('https://finix.sandbox-payments-api.com/transfers', {
       method: 'POST',
       headers,
       body: JSON.stringify({
         amount: Math.round(parseFloat(amount) * 100), // Convert to cents
         currency,
-        merchant: process.env.FINIX_MERCHANT_ID, // use your merchant ID
+        merchant: 'MUmfEGv5bMpSJ9k5TFRUjkmm', // use your merchant ID
         source: paymentInstrument.id,
-        tags: {
-          integration_type: 'direct_api'
-        }
       }),
     });
 

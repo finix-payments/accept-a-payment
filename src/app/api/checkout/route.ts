@@ -28,13 +28,16 @@ export async function POST(request: NextRequest) {
     const tax = subtotal * 0.1; // 10% tax
     const total = subtotal + tax;
 
+    const isDev = process.env.NODE_ENV === 'development';
+    const baseUrl = isDev ? 'http://localhost:3000' : 'https://finixsamplestore.com';
+
     // Construct the checkout request
     const checkoutRequest = {
-      merchant_id: process.env.FINIX_MERCHANT_ID,
-      payment_frequency: "ONE_TIME",
+      merchant_id: 'MUmfEGv5bMpSJ9k5TFRUjkmm',
+      payment_frequency: 'ONE_TIME',
       is_multiple_use: false,
-      allowed_payment_methods: ["PAYMENT_CARD"],
-      nickname: "Finix Store Checkout",
+      allowed_payment_methods: ['PAYMENT_CARD'],
+      nickname: 'Finix Store Checkout',
       // set the items to show the customer
       items: items.map(item => ({
         image_details: {
@@ -43,21 +46,19 @@ export async function POST(request: NextRequest) {
         description: item.description,
         price_details: {
           sale_amount: Math.round(item.price * 100), // Convert to cents
-          currency: "USD",
+          currency: 'USD',
         },
         quantity: item.quantity.toString()
       })),
       // set amount details
       amount_details: {
-        amount_type: "FIXED",
+        amount_type: 'FIXED',
         total_amount: Math.round(total * 100), // Convert to cents
-        currency: "USD",
+        currency: 'USD',
         amount_breakdown: {
           subtotal_amount: Math.round(subtotal * 100),
           shipping_amount: 0,
           estimated_tax_amount: Math.round(tax * 100),
-          discount_amount: "0",
-          tip_amount: "0"
         }
       },
       // set additional experience details and return URLs
@@ -67,27 +68,27 @@ export async function POST(request: NextRequest) {
         collect_phone_number: true,
         collect_billing_address: true,
         collect_shipping_address: true,
-        success_return_url: `${process.env.PUBLIC_BASE_URL}/checkout/success?amount=${Math.round(total * 100)}`,
-        cart_return_url: `${process.env.PUBLIC_BASE_URL}/cart`,
-        expired_session_url: `${process.env.PUBLIC_BASE_URL}/cart`,
-        terms_of_service_url: `${process.env.PUBLIC_BASE_URL}/terms`,
+        success_return_url: `${baseUrl}/checkout/success?amount=${Math.round(total * 100)}`,
+        cart_return_url: `${baseUrl}/cart`,
+        expired_session_url: `${baseUrl}/cart`,
+        terms_of_service_url: `${baseUrl}/terms`,
         expiration_in_minutes: 60 // 1 hour expiration
       },
       // add your branding here
       branding: {
-        brand_color: "#fbe5d0",
-        accent_color: "#ff4838",
-        logo: "https://s3.amazonaws.com/customer-uploaded-assets-prod/04-12-2023-05_13_37_ACME_logo-01%20%281%29.png",
-        icon: "https://s3.amazonaws.com/customer-uploaded-assets-prod/04-12-2023-05_13_37_ACME_logo-01%20%281%29.png"
+        brand_color: '#fbe5d0',
+        accent_color: '#ff4838',
+        logo: 'https://s3.amazonaws.com/customer-uploaded-assets-prod/04-12-2023-05_13_37_ACME_logo-01%20%281%29.png',
+        icon: 'https://s3.amazonaws.com/customer-uploaded-assets-prod/04-12-2023-05_13_37_ACME_logo-01%20%281%29.png',
       },
     };
 
     // Make request to Finix API
-    const response = await fetch(`${process.env.FINIX_API_URL}/checkout_forms`, {
+    const response = await fetch('https://finix.sandbox-payments-api.com/checkout_forms', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${Buffer.from(`${process.env.FINIX_API_KEY}:${process.env.FINIX_API_SECRET}`).toString('base64')}`
+        'Authorization': `Basic ${Buffer.from('USfdccsr1Z5iVbXDyYt7hjZZ:313636f3-fac2-45a7-bff7-a334b93e7bda').toString('base64')}` // use your API key and secret
       },
       body: JSON.stringify(checkoutRequest)
     });
