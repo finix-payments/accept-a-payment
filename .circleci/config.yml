@@ -1,0 +1,74 @@
+version: 2.1
+
+orbs:
+    aws-cli: circleci/aws-cli@5.2.0
+
+jobs:
+    build-and-compile-prod:
+        docker:
+            - image: cimg/node:18.20.8
+        resource_class: medium
+        environment:
+            GIT_APP_HTTP: accept-a-payment
+            NEXT_PUBLIC_GTM: 1
+        steps:
+            - checkout
+            - run: npm ci
+            - run: npm run build
+            - run:
+                  name: Prepare artifact
+                  command: |
+                      mkdir -p artifact
+                      tar -czf artifact/build.tgz .next node_modules package.json package-lock.json
+            - persist_to_workspace:
+                  root: ~/
+                  paths:
+                      - project/artifact
+
+    deploy-prod:
+        executor: aws-cli/default
+        resource_class: medium
+        environment:
+            AWS_S3_APP: accept-a-payment 
+            AWS_DISTR_ID: E1IU2FQ0QFN10N
+            AWS_S3_PROD_BUCKET: codepipeline-us-east-1-629652150724
+        steps:
+            - attach_workspace:
+                  at: ~/
+            - aws-cli/setup
+            - run:
+                  name: Deploy to S3
+                  command: |
+                      aws s3 cp artifact/build.tgz s3://${AWS_S3_PROD_BUCKET}/accept-a-payment/BuildArtif/
+            - run:
+                  name: Invalidate CloudFront Cache
+                  command: |
+                      aws cloudfront create-invalidation --distribution-id ${AWS_DISTR_ID} --paths "/*"
+
+workflows:
+    build-deploy-prod:
+        jobs:
+            - build-and-compile-prod:
+                  filters:
+                      branches:
+                          ignore: /.*/
+                      tags:
+                          only: /^(HOTPROD|PROD).*/
+            - approve_prod:
+                  type: approval
+                  filters:
+                      branches:
+                          ignore: /.*/
+                      tags:
+                          only: /^(HOTPROD|PROD).*/
+                  requires:
+                      - build-and-compile-prod
+            - deploy-prod:
+                  filters:
+                      branches:
+                          ignore: /.*/
+                      tags:
+                          only: /^(HOTPROD|PROD).*/
+                  requires:
+                      - approve_prod
+                  context: prod-approval
