@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy'
+        description: 'Environment to deploy to'
         required: true
         type: choice
         options:
@@ -45,7 +45,7 @@ jobs:
           docker push 830706739344.dkr.ecr.us-west-2.amazonaws.com/finix-apps/accept-a-payment:$TAG
 
   deploy:
-    name: Deploy 
+    name: Deploy
     needs: build
     uses: finix-payments/finix-github-actions/.github/workflows/deploy-helm-chart-self-hosted.yaml@main
     with:
