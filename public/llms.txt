@@ -1,0 +1,99 @@
+# Finix Sample E-commerce Application
+
+> This is a test web application demonstrating how to integrate Finix's payment gateway solutions into a modern, full-stack e-commerce site using both Checkout and Tokenization Forms.
+
+## Purpose
+
+To provide developers and integrators with a working example of implementing secure online payments using **Finix's developer SDKs**, including **hosted checkout**, **tokenization**, and **payment orchestration**.
+
+This site is intended as a **developer demo** and should not be used for real transactions.
+
+---
+
+## Technologies Used
+
+- **Next.js 15** – Full-stack React framework
+- **TypeScript** – Static type checking
+- **Finix Checkout Forms** – Hosted payment UI
+- **Finix Tokenization Forms** – Secure client-side card tokenization
+- **Tailwind CSS** – Responsive, utility-first styling
+
+---
+
+## Key Features
+
+- 🛒 Product catalog browsing and cart management
+- 💳 Hosted and tokenized checkout examples
+- 🔐 Secure card data handling and token creation
+- 📱 Responsive mobile-first UI
+- 🌙 Dark mode support
+- 🧩 Embedded code inspector for developer education
+
+---
+
+## App Routes and Pages
+
+### `/`
+- **Homepage** introducing the Finix sample app
+- Explains Checkout Forms and Tokenization Form usage
+
+### `/products`
+- Lists demo products available for purchase
+
+### `/cart`
+- Shopping cart for reviewing and modifying selections
+
+### `/checkout/tokenization`
+- Checkout flow using **Finix Tokenization Form**
+- Demonstrates secure, PCI-compliant payment method capture
+
+### `/checkout/hosted`
+- Hosted Checkout experience using **Finix's hosted UI**
+- Useful for merchants who want fast, fully hosted integrations
+
+---
+
+## Code Locations
+
+- **Tokenization Checkout Page**
+  `src/app/checkout/tokenization/page.tsx`
+
+- **Hosted Checkout Page**
+  `src/app/checkout/hosted/page.tsx`
+
+- **Payment Form Component**
+  `src/app/components/PaymentForm.tsx`
+
+---
+
+## Integration Examples
+
+- [Tokenization Form](/checkout/tokenization) – Secure client-side card tokenization
+- [Hosted Checkout](/checkout/hosted) – Pre-built hosted form integration
+- [Cart System](/cart) – Example of dynamic cart handling with payment hooks
+
+---
+
+## Documentation and Developer Resources
+
+- [Finix Tokenization Forms Guide](https://finix.com/docs/guides/payments/online-payments/payment-details/token-forms)
+- [Finix Hosted Checkout Forms Guide](https://finix.com/docs/guides/payments/modify/checkout-forms)
+- [Finix API Payment Guide](https://finix.com/docs/guides/payments/online-payments/getting-started/finix-api/making-a-payment-api)
+- [Developer Integration Overview](https://finix.com/docs/guides/getting-started/integration-overview/)
+- [Full API Docs](https://finix.com/docs)
+
+---
+
+## GitHub Repository
+
+https://github.com/finix-payments/accept-a-payment/
+
+---
+
+## Keywords
+
+`finix payments`, `payment gateway demo`, `tokenization form`, `hosted checkout`, `next.js payments`, `developer sandbox`, `PCI-compliant payments`, `payment orchestration`, `ecommerce SDK`, `secure card entry`
+
+---
+
+> ⚠️ This is a sandbox application for testing purposes only. Do not use real card data. Use test card number: `4111 1111 1111 1111`.

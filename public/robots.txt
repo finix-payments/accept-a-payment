@@ -1,0 +1,13 @@
+User-Agent: *
+Allow: /
+Allow: /products
+Allow: /cart
+Allow: /checkout
+Allow: /checkout/tokenization
+Allow: /llms.txt
+Disallow: /api/
+Disallow: /test/
+Disallow: /dev/
+
+Host: https://finixsamplestore.com
+Sitemap: https://finixsamplestore.com/sitemap.xml
