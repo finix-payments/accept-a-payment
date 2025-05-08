@@ -1,0 +1,4 @@
+apiVersion: v2
+name: accept-a-payment
+version: 0.1.0
+description: Chart for NextJS application 

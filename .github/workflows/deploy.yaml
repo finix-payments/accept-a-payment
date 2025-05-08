@@ -1,3 +1,5 @@
+name: Build and Deploy
+
 on:
   workflow_dispatch:
     inputs:
@@ -6,23 +8,51 @@ on:
         required: true
         type: choice
         options:
-          # - dev
           - prod
+      commit_sha:
+        description: 'Commit SHA to deploy'
+        type: string
+        default: ""
       jira_ticket:
         description: 'Release management Jira ticket'
-        type: string
         required: true
+        type: string
+
 permissions:
   contents: read
+
 jobs:
   build:
-    uses: finix-payments/finix-github-actions/.github/workflows/build-nodejs-project.yaml@main
-    with: 
-      run_node_tests: false
+    name: Build 
+    runs-on: [self-hosted, qa, build]
+
+    steps:
+      - name: Checkout Code
+        uses: finix-payments/finix-github-actions/actions/git-sha-checkout@main
+        id: checkout
+        with:
+          commit_sha: ${{ inputs.commit_sha }}
+
+      - name: Login to ECR
+        uses: finix-payments/finix-github-actions/actions/login-to-finix-ecr@main
+        with:
+          registry: 830706739344.dkr.ecr.us-west-2.amazonaws.com
+
+      - name: Build and Push Image
+        run: |
+          export TAG=$(echo "${{ inputs.commit_sha || github.sha }}" | cut -c1-8)
+          docker build -t 830706739344.dkr.ecr.us-west-2.amazonaws.com/finix-apps/accept-a-payment:$TAG .
+          docker push 830706739344.dkr.ecr.us-west-2.amazonaws.com/finix-apps/accept-a-payment:$TAG
+
   deploy:
-    needs: 
-      - build
-    uses: finix-payments/finix-github-actions/.github/workflows/publish-to-finix-cdn.yaml@main
-    with: 
+    name: Deploy
+    needs: build
+    uses: finix-payments/finix-github-actions/.github/workflows/deploy-helm-chart-self-hosted.yaml@main
+    with:
       environment: ${{ inputs.environment }}
-      s3_path: "accept-a-payment-${{ inputs.environment }}"
+      commit_sha: ${{ inputs.commit_sha }}
+      application: accept-a-payment
+      namespace: frontend-domain
+      helm_chart_name: accept-a-payment
+      helm_chart_version: 0.1.0
+    secrets: inherit
