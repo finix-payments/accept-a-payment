@@ -1,0 +1,32 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Code Conventions
+
+## File Organization
+
+- **App Router Pattern** - Next.js App Router for file-based routing
+  - Page components in `src/app/*/page.tsx`
+  - Layout components in `src/app/*/layout.tsx`
+  - Route handlers in `src/app/api/*/route.ts`
+
+## Component Structure
+
+- React functional components with TypeScript
+- Props interfaces defined for each component
+- React hooks for state management
+- Context providers for shared state
+
+## TypeScript Usage
+
+- Strong typing for all components and functions
+- Type definitions in [src/types](mdc:src/types)
+- Interface declarations near component usage
+
+## API Structure
+
+- API endpoints follow Next.js App Router conventions
+- Route handlers defined in `src/app/api/*/route.ts`
+- HTTP methods (GET, POST) defined as separate exported functions

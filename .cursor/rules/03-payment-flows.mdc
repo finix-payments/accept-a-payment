@@ -1,0 +1,31 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Payment Flows
+
+## Finix Hosted Checkout Flow
+
+1. Customer adds items to cart
+2. Customer clicks "Checkout with Finix Hosted"
+3. App creates a payment session through the API
+4. Customer is redirected to Finix's hosted checkout page
+5. After payment, customer is redirected back to success/failure page
+
+Key files in this flow:
+- [src/app/checkout/hosted](mdc:src/app/checkout/hosted) - Frontend components
+- [src/app/api/checkout](mdc:src/app/api/checkout) - API endpoints to create checkout session
+
+## Finix Tokenization Form Flow
+
+1. Customer adds items to cart
+2. Customer clicks "Checkout with Tokenization"
+3. Customer enters payment details in the embedded form
+4. Form creates a payment token
+5. Token is sent to our API to process the payment
+6. Customer sees success/failure message
+
+Key files in this flow:
+- [src/app/checkout/tokenization](mdc:src/app/checkout/tokenization) - Frontend components with embedded form
+- [src/app/api/payments](mdc:src/app/api/payments) - API endpoints to process tokenized payments

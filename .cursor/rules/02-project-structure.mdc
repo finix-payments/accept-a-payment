@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Project Structure
+
+## Frontend Structure
+
+- [src/app/home](mdc:src/app/home) - Home page components
+- [src/app/products](mdc:src/app/products) - Product catalog components
+- [src/app/cart](mdc:src/app/cart) - Shopping cart functionality
+- [src/app/checkout](mdc:src/app/checkout) - Payment checkout components
+  - [src/app/checkout/hosted](mdc:src/app/checkout/hosted) - Finix Hosted Checkout implementation
+  - [src/app/checkout/tokenization](mdc:src/app/checkout/tokenization) - Finix Tokenization Form implementation
+  - [src/app/checkout/success](mdc:src/app/checkout/success) - Success page after payment
+
+## Backend Structure
+
+- [src/app/api](mdc:src/app/api) - API routes
+  - [src/app/api/checkout](mdc:src/app/api/checkout) - Checkout API endpoints
+  - [src/app/api/payments](mdc:src/app/api/payments) - Payment processing endpoints
+
+## Shared Components
+
+- [src/app/components](mdc:src/app/components) - Shared UI components
+- [src/app/context](mdc:src/app/context) - React context providers
+- [src/types](mdc:src/types) - TypeScript type definitions

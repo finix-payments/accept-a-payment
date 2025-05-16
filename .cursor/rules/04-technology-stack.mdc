@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Technology Stack
+
+## Frontend Technologies
+
+- **Next.js** (v15) - React framework for server-side rendering and static site generation
+- **React** (v19) - UI library for building components
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** (v4) - Utility-first CSS framework
+- **Heroicons** - SVG icons library
+
+## Development Tools
+
+- **ESLint** - Code linting
+- **Turbopack** - Fast incremental bundler for development
+- **Prismjs** - Code syntax highlighting for examples
+
+## Key Dependencies
+
+See the full list of dependencies in [package.json](mdc:package.json).

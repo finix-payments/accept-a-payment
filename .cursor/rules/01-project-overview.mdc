@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Project Overview
+
+This is a Next.js e-commerce application that demonstrates how to integrate Finix Payments. The application showcases two payment methods:
+
+1. **Finix Hosted Checkout** - Redirects customers to a secure Finix-hosted checkout page
+2. **Finix Tokenization Form** - Embeds the Finix Tokenization Form directly in the website
+
+## Key Files
+
+- [package.json](mdc:package.json) - Project dependencies and scripts
+- [next.config.js](mdc:next.config.js) - Next.js configuration
+- [src/app/layout.tsx](mdc:src/app/layout.tsx) - Main application layout
+- [src/app/page.tsx](mdc:src/app/page.tsx) - Root page component

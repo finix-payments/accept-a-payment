@@ -1,65 +1,120 @@
-# Finix Payment Integration Example
+# My Figures Payments for GoHighLevel
 
-This is an example e-commerce application that demonstrates how to integrate Finix Payments into a Next.js web application. The example shows two different methods of accepting payments:
+A white-label payment provider for GoHighLevel marketplace powered by Finix.
 
-1. Finix Hosted Checkout - Redirects customers to a secure Finix-hosted checkout page
-2. Finix Tokenization Form - Embeds the Finix Tokenization Form directly in the website
+## Overview
+
+My Figures Payments is a custom payment provider integration for GoHighLevel that allows businesses to accept payments directly through their GoHighLevel account. This integration leverages Finix as the underlying payment processor while presenting a seamless, white-labeled payment experience for your customers.
 
 ## Features
 
-- Next.js 14 e-commerce example with TypeScript
-- Basic UI using Tailwind CSS
-- Product catalog with example items
-- Shopping cart functionality
-- Two payment integration methods
-- Simple API example for payment processing
+- **White-Labeled Payment Processing**: Offer a seamless payment experience under your own brand
+- **One-Time Payments**: Accept one-time payments through forms, order pages, and payment links
+- **Recurring Payments**: Create and manage subscriptions with automatic billing
+- **Off-Session Payments**: Charge saved payment methods without customer interaction
+- **Test & Live Modes**: Test your payment integration before going live
+- **Management UI**: Easy-to-use interface for configuring payment settings
+- **Webhook Support**: Real-time notifications for payment events
 
-## Getting Started
+## Requirements
 
-1. Clone the repository:
-```bash
-git clone https://github.com/finix-payments/accept-a-payment.git
-cd accept-a-payment
-```
+- Node.js 16+
+- GoHighLevel Developer Account
+- Finix Account (with API credentials)
+
+## Installation
+
+1. Clone this repository:
+   ```
+   git clone https://github.com/yourusername/my-figures-payments.git
+   cd my-figures-payments
+   ```
 
 2. Install dependencies:
-```bash
-npm install
-```
+   ```
+   npm install
+   ```
 
-3. Run the development server:
-```bash
-npm run dev
-```
+3. Create a `.env.local` file with the following variables:
+   ```
+   # GoHighLevel app credentials
+   GHL_APP_CLIENT_ID=your_client_id
+   GHL_APP_CLIENT_SECRET=your_client_secret
+   GHL_API_DOMAIN=https://services.leadconnectorhq.com
+   GHL_APP_SSO_KEY=your_sso_key
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+   # Your app URL
+   APP_URL=http://localhost:3000
 
-## Payment Integration Methods
+   # Finix API credentials
+   FINIX_API_KEY=your_finix_api_key
+   FINIX_API_SECRET=your_finix_api_secret
+   FINIX_MERCHANT_ID=your_finix_merchant_id
 
-### 1. Finix Hosted Checkout
+   # My Figures configuration
+   MY_FIGURES_API_KEY=my_figures_api_key
+   ```
 
-This method redirects customers to a secure Finix-hosted checkout page. The flow is:
+4. Start the development server:
+   ```
+   npm run dev
+   ```
 
-1. Customer adds items to cart
-2. Customer clicks "Checkout with Finix Hosted"
-3. Customer is redirected to Finix's hosted checkout page
-4. After payment, customer is redirected back to success/failure page
+## Creating a GoHighLevel Marketplace App
 
-### 2. Finix Tokenization Form
+1. Sign up for a developer account at [GoHighLevel Marketplace](https://marketplace.gohighlevel.com/).
 
-This method embeds the Finix Tokenization Form directly in the website. The flow is:
+2. Create a new marketplace app with the following settings:
+   - **App Name**: My Figures Payments
+   - **Category**: Third Party Provider
+   - **Required Scopes**:
+     - payments/orders.readonly
+     - payments/orders.write
+     - payments/subscriptions.readonly
+     - payments/transactions.readonly
+     - payments/custom-provider.readonly
+     - payments/custom-provider.write
+     - products.readonly
+     - products/prices.readonly
+   - **Redirect URL**: `${APP_URL}/api/authorize-handler`
+   - **Webhook URL**: `${APP_URL}/api/webhook-handler`
 
-1. Customer adds items to cart
-2. Customer clicks "Checkout with Tokenization"
-3. Customer enters payment details in the embedded form
-4. Form creates a payment token
-5. Token is sent to our API to process the payment
-6. Customer sees success/failure message
+3. Configure the payment provider settings:
+   - **Name**: My Figures Payments
+   - **Description**: White-label payment processing powered by Finix
+   - **Payment Provider Types**: OneTime, Recurring, OffSession
+   - **Logo**: Upload your branded logo
 
-## Contributing
+## Deployment
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+This application can be deployed to any Node.js hosting service. We recommend using [Render](https://render.com/) for easy deployment:
+
+1. Create a new Web Service on Render
+2. Connect your GitHub repository
+3. Set the build command to `npm install && npm run build`
+4. Set the start command to `npm start`
+5. Add all environment variables from `.env.local`
+6. Deploy the application
+
+## Integration Flow
+
+1. **App Installation**: When a user installs your app from the marketplace, they are redirected to the authorization handler endpoint.
+2. **OAuth Flow**: The authorization handler exchanges the code for an access token and creates the payment provider configuration in GHL.
+3. **Configuration**: The user is redirected to the management UI to configure their Finix API credentials.
+4. **Payment Processing**: When a customer makes a payment in GHL, the payment iframe is loaded and handles the communication with Finix.
+5. **Webhooks**: Webhook events are sent to your application to notify about payment statuses and subscription updates.
+
+## Testing
+
+Use the following test card numbers to test different payment scenarios:
+
+- `4111 1111 1111 1111` - Successful payment
+- `4000 0000 0000 0002` - Declined payment
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+[MIT License](LICENSE)
+
+## Support
+
+For support, please contact [support@myfigures.com](mailto:support@myfigures.com).
