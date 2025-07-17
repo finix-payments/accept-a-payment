@@ -8,6 +8,7 @@ import { InspectorProvider } from "./context/InspectorContext";
 import InspectorButton from "./components/inspector/InspectorButton";
 import InspectorOverlay from "./components/inspector/InspectorOverlay";
 import CartNavLink from "./components/CartNavLink";
+import GooglePayProvider from "./components/GooglePayProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,10 +40,12 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <Script src="https://js.finix.com/v/1/2/3/finix.js" strategy="beforeInteractive" />
+        <Script src="https://pay.google.com/gp/p/js/pay.js" strategy="afterInteractive" />
       </head>
       <body className={inter.className}>
-        <CartProvider>
-          <InspectorProvider>
+        <GooglePayProvider>
+          <CartProvider>
+            <InspectorProvider>
             <nav className="bg-white dark:bg-gray-800 shadow-lg">
               <div className="max-w-7xl mx-auto px-4">
                 <div className="flex justify-between h-16">
@@ -74,7 +77,8 @@ export default function RootLayout({
             <InspectorOverlay />
           </InspectorProvider>
         </CartProvider>
-      </body>
-    </html>
-  );
+      </GooglePayProvider>
+    </body>
+  </html>
+);
 }

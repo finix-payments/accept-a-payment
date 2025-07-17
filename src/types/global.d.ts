@@ -91,6 +91,14 @@ interface FieldState {
         CardTokenForm: (id: string, options: FinixFormOptions) => FinixForm;
         BankTokenForm: (id: string, options: FinixFormOptions) => FinixForm;
       };
+      google?: {
+        payments?: {
+          api?: {
+            PaymentsClient: new (options: GooglePayClientOptions) => GooglePayClient;
+          };
+        };
+      };
+      googlePayClient?: GooglePayClient;
     }
   }
   
@@ -105,4 +113,66 @@ interface FieldState {
     };
   }
   
+  export interface GooglePayClientOptions {
+    environment: 'TEST' | 'PRODUCTION';
+  }
+
+  export interface GooglePayClient {
+    isReadyToPay: (request: IsReadyToPayRequest) => Promise<IsReadyToPayResponse>;
+    loadPaymentData: (request: PaymentDataRequest) => Promise<PaymentData>;
+  }
+
+  export interface IsReadyToPayRequest {
+    apiVersion: number;
+    apiVersionMinor: number;
+    allowedPaymentMethods: PaymentMethod[];
+  }
+
+  export interface IsReadyToPayResponse {
+    result: boolean;
+  }
+
+  export interface PaymentMethod {
+    type: string;
+    parameters?: {
+      allowedAuthMethods: string[];
+      allowedCardNetworks: string[];
+    };
+    tokenizationSpecification?: {
+      type: string;
+      parameters: Record<string, string>;
+    };
+  }
+
+  export interface PaymentDataRequest {
+    apiVersion: number;
+    apiVersionMinor: number;
+    allowedPaymentMethods: PaymentMethod[];
+    merchantInfo: {
+      merchantId?: string;
+      merchantName: string;
+    };
+    transactionInfo: {
+      totalPriceStatus: string;
+      totalPrice: string;
+      currencyCode: string;
+      countryCode?: string;
+    };
+  }
+
+  export interface PaymentData {
+    paymentMethodData: {
+      description: string;
+      info: {
+        cardNetwork: string;
+        cardDetails: string;
+      };
+      tokenizationData: {
+        type: string;
+        token: string;
+      };
+      type: string;
+    };
+  }
+
   export {};
