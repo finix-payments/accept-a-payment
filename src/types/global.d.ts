@@ -120,6 +120,15 @@ interface FieldState {
   export interface GooglePayClient {
     isReadyToPay: (request: IsReadyToPayRequest) => Promise<IsReadyToPayResponse>;
     loadPaymentData: (request: PaymentDataRequest) => Promise<PaymentData>;
+    createButton: (options: GooglePayButtonOptions) => HTMLElement;
+  }
+
+  export interface GooglePayButtonOptions {
+    onClick: () => void;
+    buttonColor?: 'default' | 'black' | 'white';
+    buttonType?: 'book' | 'buy' | 'checkout' | 'donate' | 'order' | 'pay' | 'plain' | 'subscribe' | 'long';
+    buttonRadius?: number;
+    allowedPaymentMethods?: PaymentMethod[];
   }
 
   export interface IsReadyToPayRequest {

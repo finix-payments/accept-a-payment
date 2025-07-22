@@ -41,6 +41,7 @@ export default function RootLayout({
       <head>
         <Script src="https://js.finix.com/v/1/2/3/finix.js" strategy="beforeInteractive" />
         <Script src="https://pay.google.com/gp/p/js/pay.js" strategy="afterInteractive" />
+        <Script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js" strategy="afterInteractive" />
       </head>
       <body className={inter.className}>
         <GooglePayProvider>
