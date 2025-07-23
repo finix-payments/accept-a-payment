@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { FinixForm, PaymentFormProps, FormState, BinInformation, PaymentData } from '@/types/global';
+import { FinixForm, PaymentFormProps, FormState, BinInformation } from '@/types/global';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/app/context/CartContext';
 import { paymentFormCode } from './inspector/code/PaymentFormCode';
@@ -112,15 +112,13 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
     }
   };
 
-  const handleGooglePaySuccess = async (paymentData: PaymentData) => {
+  const handleGooglePaySuccess = async (paymentData: google.payments.api.PaymentData) => {
     setIsProcessing(true);
     setError(null);
 
     try {
       // Extract the token from Google Pay response
       const googlePayToken = paymentData.paymentMethodData.tokenizationData.token;
-      console.log('Google Pay token received:', googlePayToken);
-
       await handleTokenReceived(googlePayToken, true); // Pass true to indicate Google Pay
     } catch (err) {
       setIsProcessing(false);
@@ -177,4 +175,4 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
       />
     </div>
   );
-} 
+}

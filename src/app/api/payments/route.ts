@@ -14,13 +14,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Processing payment:', {
-      tokenLength: token.length,
-      amount,
-      currency,
-      isGooglePay
-    });
-
     // Set up headers for Finix API requests
     const headers = {
       'Content-Type': 'application/json',
@@ -57,8 +50,6 @@ export async function POST(request: NextRequest) {
           identity: identity.id,
         };
 
-    console.log('Creating payment instrument with:', paymentInstrumentBody);
-
     const paymentInstrumentResponse = await fetch('https://finix.sandbox-payments-api.com/payment_instruments', {
       method: 'POST',
       headers,
@@ -67,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     if (!paymentInstrumentResponse.ok) {
       const error = await paymentInstrumentResponse.json();
-      console.log('Payment Instrument Error:', JSON.stringify(error, null, 2));
+      console.error('Payment Instrument Error:', JSON.stringify(error, null, 2));
       throw new Error(error.message || 'Payment instrument creation failed');
     }
 

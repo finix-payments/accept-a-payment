@@ -8,7 +8,6 @@ import { InspectorProvider } from "./context/InspectorContext";
 import InspectorButton from "./components/inspector/InspectorButton";
 import InspectorOverlay from "./components/inspector/InspectorOverlay";
 import CartNavLink from "./components/CartNavLink";
-import GooglePayProvider from "./components/GooglePayProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,9 +43,8 @@ export default function RootLayout({
         <Script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js" strategy="afterInteractive" />
       </head>
       <body className={inter.className}>
-        <GooglePayProvider>
-          <CartProvider>
-            <InspectorProvider>
+        <CartProvider>
+          <InspectorProvider>
             <nav className="bg-white dark:bg-gray-800 shadow-lg">
               <div className="max-w-7xl mx-auto px-4">
                 <div className="flex justify-between h-16">
@@ -78,7 +76,6 @@ export default function RootLayout({
             <InspectorOverlay />
           </InspectorProvider>
         </CartProvider>
-      </GooglePayProvider>
     </body>
   </html>
 );

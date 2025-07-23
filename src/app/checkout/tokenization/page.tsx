@@ -32,18 +32,18 @@ export default function TokenizationPage() {
             <nav className="text-sm">
               <ol className="flex items-center space-x-2">
                 <li>
-                  <Link href="/products" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                  <Link href="/products" className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                     Products
                   </Link>
                 </li>
                 <li className="text-gray-500 dark:text-gray-400">/</li>
                 <li>
-                  <Link href="/cart" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                  <Link href="/cart" className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                     Cart
                   </Link>
                 </li>
                 <li className="text-gray-500 dark:text-gray-400">/</li>
-                <li className="text-gray-500 dark:text-gray-400">Payment</li>
+                <li className="text-blue-500 dark:text-blue-400">Payment</li>
               </ol>
             </nav>
           </div>

@@ -169,19 +169,4 @@ interface FieldState {
     };
   }
 
-  export interface PaymentData {
-    paymentMethodData: {
-      description: string;
-      info: {
-        cardNetwork: string;
-        cardDetails: string;
-      };
-      tokenizationData: {
-        type: string;
-        token: string;
-      };
-      type: string;
-    };
-  }
-
   export {};
