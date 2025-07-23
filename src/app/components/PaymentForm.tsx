@@ -5,7 +5,6 @@ import { FinixForm, PaymentFormProps, FormState, BinInformation } from '@/types/
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/app/context/CartContext';
 import { paymentFormCode } from './inspector/code/PaymentFormCode';
-import GooglePayButton from './GooglePayButton';
 
 export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormProps) {
   const finixForm = useRef<FinixForm | null>(null);
@@ -52,7 +51,7 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
     }
   }, []);
 
-  const handleTokenReceived = async (token: string, isGooglePay = false) => {
+  const handleTokenReceived = async (token: string) => {
     try {
       const response = await fetch('/api/payments', {
         method: 'POST',
@@ -63,7 +62,7 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
           token,
           amount: Math.round(total * 100),
           currency: 'USD',
-          isGooglePay, // Add flag to indicate Google Pay token
+          isGooglePay: false,
           shippingAddress: {
             line1: shippingAddress.line1,
             line2: shippingAddress.line2,
@@ -112,24 +111,6 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
     }
   };
 
-  const handleGooglePaySuccess = async (paymentData: google.payments.api.PaymentData) => {
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      // Extract the token from Google Pay response
-      const googlePayToken = paymentData.paymentMethodData.tokenizationData.token;
-      await handleTokenReceived(googlePayToken, true); // Pass true to indicate Google Pay
-    } catch (err) {
-      setIsProcessing(false);
-      setError('Google Pay payment failed: ' + (err as Error).message);
-    }
-  };
-
-  const handleGooglePayError = (error: Error) => {
-    setError('Google Pay payment failed: ' + error.message);
-  };
-
   return (
     <div data-inspectable data-component="PaymentForm" data-code={paymentFormCode}>
       <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Billing Information</h2>
@@ -166,13 +147,6 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
           )}
         </button>
       </div>
-
-      {/* Google Pay Button */}
-      <GooglePayButton
-        onPaymentSuccess={handleGooglePaySuccess}
-        onPaymentError={handleGooglePayError}
-        disabled={isProcessing}
-      />
     </div>
   );
 }

@@ -45,7 +45,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <CartProvider>
           <InspectorProvider>
-            <nav className="bg-white dark:bg-gray-800 shadow-lg">
+            <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
               <div className="max-w-7xl mx-auto px-4">
                 <div className="flex justify-between h-16">
                   <div className="flex">

@@ -5,10 +5,14 @@ import Image from 'next/image';
 import { useCart } from '@/app/context/CartContext';
 import PaymentForm from '../../components/PaymentForm';
 import ShippingAddressForm from '../../components/ShippingAddressForm';
+import GooglePayButton from '../../components/GooglePayButton';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function TokenizationPage() {
   const { items, totalPrice } = useCart();
+  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
   const [shippingAddress, setShippingAddress] = useState({
     line1: '',
     line2: '',
@@ -21,6 +25,51 @@ export default function TokenizationPage() {
   const subtotal = totalPrice;
   const tax = subtotal * 0.1;
   const total = subtotal + tax;
+
+  const handleGooglePaySuccess = async (paymentData: google.payments.api.PaymentData) => {
+    setIsProcessing(true);
+
+    try {
+      const googlePayToken = paymentData.paymentMethodData.tokenizationData.token;
+
+      const response = await fetch('/api/payments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: googlePayToken,
+          amount: Math.round(total * 100),
+          currency: 'USD',
+          isGooglePay: true,
+          shippingAddress: {
+            line1: shippingAddress.line1,
+            line2: shippingAddress.line2,
+            city: shippingAddress.city,
+            state: shippingAddress.state,
+            zip: shippingAddress.zip,
+            country: shippingAddress.country
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Payment processing failed');
+      }
+
+      const data = await response.json();
+      router.push(`/checkout/success?transferId=${data.id}&amount=${Math.round(total * 100)}`);
+    } catch (err) {
+      console.error('Google Pay payment failed:', err);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleGooglePayError = (error: Error) => {
+    console.error('Google Pay payment failed:', error);
+  };
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
@@ -65,43 +114,54 @@ export default function TokenizationPage() {
       </div>
 
       {/* Right Column - Order Summary */}
-      <div className="w-full lg:w-1/3 bg-gray-50 dark:bg-gray-800 p-8 border-t lg:border-t-0 lg:border-l border-gray-300 dark:border-gray-700">
-        <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">Order Summary</h2>
-        
-        {/* Cart Items */}
-        <div className="space-y-4 mb-6">
-          {items.map((item) => (
-            <div key={item.id} className="flex items-center space-x-4">
-              <div className="relative w-20 h-20">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  fill
-                  className="object-cover rounded-md"
-                />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900 dark:text-gray-100">{item.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Quantity: {item.quantity}</p>
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">${(item.price * item.quantity).toFixed(2)}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="w-full lg:w-1/3 bg-gray-50 dark:bg-gray-800 border-t lg:border-t-0 lg:border-l border-gray-300 dark:border-gray-700">
+        <div className="sticky top-0 p-8">
+          <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">Order Summary</h2>
 
-        {/* Order Summary */}
-        <div className="border-t border-gray-300 dark:border-gray-700 pt-4 space-y-2">
-          <div className="flex justify-between text-sm text-gray-700 dark:text-gray-300">
-            <span>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
+          {/* Cart Items */}
+          <div className="space-y-4 mb-6">
+            {items.map((item) => (
+              <div key={item.id} className="flex items-center space-x-4">
+                <div className="relative w-20 h-20">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">{item.name}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Quantity: {item.quantity}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">${(item.price * item.quantity).toFixed(2)}</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="flex justify-between text-sm text-gray-700 dark:text-gray-300">
-            <span>Tax (10%)</span>
-            <span>${tax.toFixed(2)}</span>
+
+          {/* Order Summary */}
+          <div className="border-t border-gray-300 dark:border-gray-700 pt-4 space-y-2">
+            <div className="flex justify-between text-sm text-gray-700 dark:text-gray-300">
+              <span>Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between text-sm text-gray-700 dark:text-gray-300">
+              <span>Tax (10%)</span>
+              <span>${tax.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between font-semibold pt-2 border-t border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100">
+              <span>Total</span>
+              <span>${total.toFixed(2)}</span>
+            </div>
           </div>
-          <div className="flex justify-between font-semibold pt-2 border-t border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100">
-            <span>Total</span>
-            <span>${total.toFixed(2)}</span>
+
+          {/* Google Pay Button */}
+          <div className="mt-6">
+            <GooglePayButton
+              onPaymentSuccess={handleGooglePaySuccess}
+              onPaymentError={handleGooglePayError}
+              disabled={isProcessing}
+            />
           </div>
         </div>
       </div>
