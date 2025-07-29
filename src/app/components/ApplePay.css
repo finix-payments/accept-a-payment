@@ -1,0 +1,16 @@
+.apple-pay-button {
+  display: inline-block;
+  appearance: -apple-pay-button;
+  -webkit-appearance: -apple-pay-button;
+  -apple-pay-button-style: black;
+  height: 45px;
+  margin-top: 0.5rem;
+  width: 250px;
+  /* -apple-pay-button-type: check-out; */
+  font-size: 1rem;
+  color: pink;
+}
+
+.apple-pay-button:hover {
+  cursor: pointer;
+}
