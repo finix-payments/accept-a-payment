@@ -62,7 +62,6 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
           token,
           amount: Math.round(total * 100),
           currency: 'USD',
-          isGooglePay: false,
           shippingAddress: {
             line1: shippingAddress.line1,
             line2: shippingAddress.line2,

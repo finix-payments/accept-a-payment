@@ -38,10 +38,9 @@ export default function TokenizationPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          token: googlePayToken,
+          googlePayToken,
           amount: Math.round(total * 100),
           currency: 'USD',
-          isGooglePay: true,
           shippingAddress: {
             line1: shippingAddress.line1,
             line2: shippingAddress.line2,

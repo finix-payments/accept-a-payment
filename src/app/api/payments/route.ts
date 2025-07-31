@@ -3,11 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { token, amount, currency = 'USD', isGooglePay = false } = body;
-
+    const { token, googlePayToken, amount, currency = 'USD' } = body;
 
     // Validate required fields
-    if ((!isGooglePay && !token) || !amount) {
+    if (!(token || googlePayToken) || !amount) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -37,9 +36,9 @@ export async function POST(request: NextRequest) {
     const identity = await identityResponse.json();
 
     // Claim the token by creating a Payment Instrument request to Finix API
-    const paymentInstrumentBody = isGooglePay
+    const paymentInstrumentBody = googlePayToken
       ? {
-          third_party_token: token, // Use third_party_token for Google Pay
+          third_party_token: googlePayToken, // Use third_party_token for Google Pay
           type: 'GOOGLE_PAY',
           identity: identity.id,
           merchant_identity: 'ID12345', // Add merchant identity for Google Pay
