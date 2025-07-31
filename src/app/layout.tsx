@@ -39,11 +39,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <Script src="https://js.finix.com/v/1/2/3/finix.js" strategy="beforeInteractive" />
+        <Script src="https://pay.google.com/gp/p/js/pay.js" strategy="afterInteractive" />
+        <Script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js" strategy="afterInteractive" />
       </head>
       <body className={inter.className}>
         <CartProvider>
           <InspectorProvider>
-            <nav className="bg-white dark:bg-gray-800 shadow-lg">
+            <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
               <div className="max-w-7xl mx-auto px-4">
                 <div className="flex justify-between h-16">
                   <div className="flex">
@@ -74,7 +76,7 @@ export default function RootLayout({
             <InspectorOverlay />
           </InspectorProvider>
         </CartProvider>
-      </body>
-    </html>
-  );
+    </body>
+  </html>
+);
 }

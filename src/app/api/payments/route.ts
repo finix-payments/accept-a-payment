@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { token, amount, currency = 'USD' } = body;
+    const { token, googlePayToken, amount, currency = 'USD' } = body;
 
     // Validate required fields
-    if (!token || !amount) {
+    if (!(token || googlePayToken) || !amount) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -36,18 +36,28 @@ export async function POST(request: NextRequest) {
     const identity = await identityResponse.json();
 
     // Claim the token by creating a Payment Instrument request to Finix API
+    const paymentInstrumentBody = googlePayToken
+      ? {
+          third_party_token: googlePayToken, // Use third_party_token for Google Pay
+          type: 'GOOGLE_PAY',
+          identity: identity.id,
+          merchant_identity: 'ID12345', // Add merchant identity for Google Pay
+        }
+      : {
+          token, // Use token for regular Finix tokens
+          type: 'TOKEN',
+          identity: identity.id,
+        };
+
     const paymentInstrumentResponse = await fetch('https://finix.sandbox-payments-api.com/payment_instruments', {
       method: 'POST',
       headers,
-      body: JSON.stringify({
-        token,
-        type: 'TOKEN',
-        identity: identity.id,
-      }),
+      body: JSON.stringify(paymentInstrumentBody),
     });
 
     if (!paymentInstrumentResponse.ok) {
       const error = await paymentInstrumentResponse.json();
+      console.error('Payment Instrument Error:', JSON.stringify(error, null, 2));
       throw new Error(error.message || 'Payment instrument creation failed');
     }
 
@@ -58,7 +68,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers,
       body: JSON.stringify({
-        amount: Math.round(parseFloat(amount) * 100), // Convert to cents
+        amount: Math.round(parseFloat(amount)),
         currency,
         merchant: 'MUmfEGv5bMpSJ9k5TFRUjkmm', // use your merchant ID
         source: paymentInstrument.id,
