@@ -17,12 +17,13 @@ permissions:
 jobs:
   build:
     uses: finix-payments/finix-github-actions/.github/workflows/build-nodejs-project.yaml@main
-    with: 
+    with:
       run_node_tests: false
+    secrets: inherit
   deploy:
-    needs: 
+    needs:
       - build
     uses: finix-payments/finix-github-actions/.github/workflows/publish-to-finix-cdn.yaml@main
-    with: 
+    with:
       environment: ${{ inputs.environment }}
       s3_path: "accept-a-payment-${{ inputs.environment }}"
