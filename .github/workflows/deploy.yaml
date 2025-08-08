@@ -2,57 +2,61 @@ name: Build and Deploy
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - prod
-      commit_sha:
-        description: 'Commit SHA to deploy'
-        type: string
-        default: ""
-      jira_ticket:
-        description: 'Release management Jira ticket'
-        required: true
-        type: string
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   build:
     name: Build 
-    runs-on: [self-hosted, qa, build]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
-        uses: finix-payments/finix-github-actions/actions/git-sha-checkout@main
-        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials 
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          commit_sha: ${{ inputs.commit_sha }}
+          role-to-assume: ${{ secrets.QA_ROLE_ARN }}
+          aws-region: us-west-2
 
       - name: Login to ECR
-        uses: finix-payments/finix-github-actions/actions/login-to-finix-ecr@main
-        with:
-          registry: 830706739344.dkr.ecr.us-west-2.amazonaws.com
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and Push Image
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: |
-          export TAG=$(echo "${{ inputs.commit_sha || github.sha }}" | cut -c1-8)
-          docker build -t 830706739344.dkr.ecr.us-west-2.amazonaws.com/finix-apps/accept-a-payment:$TAG .
-          docker push 830706739344.dkr.ecr.us-west-2.amazonaws.com/finix-apps/accept-a-payment:$TAG
+          export SHORT_TAG=$(echo "${{ github.sha }}" | cut -c1-8)
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_TAG
+          echo "image_tag=$SHORT_TAG" >> $GITHUB_OUTPUT
 
   deploy:
     name: Deploy
     needs: build
-    uses: finix-payments/finix-github-actions/.github/workflows/deploy-helm-chart-self-hosted.yaml@main
-    with:
-      environment: ${{ inputs.environment }}
-      commit_sha: ${{ inputs.commit_sha }}
-      application: accept-a-payment
-      namespace: frontend-domain
-      helm_chart_name: accept-a-payment
-      helm_chart_version: 0.1.0
-    secrets: inherit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials 
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.PROD_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+
+      - name: Update Kubernetes Deployment
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name ${{ secrets.EKS_CLUSTER_NAME }}
+          helm upgrade --install accept-a-payment ./kubernetes \
+            --namespace frontend-domain \
+            --set image.tag=${{ needs.build.outputs.image_tag }} \
+            --set image.repository=${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}
