@@ -6,7 +6,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   selector:
-    app: accept-a-payment
+    app: {{ .Values.service.name }}
   ports:
     - name: http
       protocol: TCP
