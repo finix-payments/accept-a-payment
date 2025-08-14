@@ -55,13 +55,13 @@ export default function GooglePayButton({
                   type: 'PAYMENT_GATEWAY',
                   parameters: {
                     gateway: 'finix',
-                    gatewayMerchantId: 'ID12345'
+                    gatewayMerchantId: 'ID12345' // Identity ID from Finix
                   }
                 }
               }
             ],
             merchantInfo: {
-              merchantId: 'MUmfEGv5bMpSJ9k5TFRUjkmm',
+              merchantId: 'GOOGMERCHID', // Merchant ID from Google
               merchantName: 'Finix Store'
             },
             transactionInfo: {
