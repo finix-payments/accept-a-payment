@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
       ? {
           third_party_token: googlePayToken, // Use third_party_token for Google Pay
           type: 'GOOGLE_PAY',
-          identity: identity.id,
-          merchant_identity: 'ID12345', // Add merchant identity for Google Pay
+          identity: identity.id, // The buyer's Identity ID to associate the payment instrument to
+          merchant_identity: 'ID12345', // Merchant Identity ID from Finix, required for Google Pay
         }
       : {
           token, // Use token for regular Finix tokens
