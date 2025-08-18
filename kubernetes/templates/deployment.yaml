@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: accept-a-payment
+  name: {{ .Values.service.name }}
   namespace: {{ .Values.namespace }}
   labels:
-    app: accept-a-payment
+    app: {{ .Values.service.name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: accept-a-payment
+      app: {{ .Values.service.name }}
   template:
     metadata:
       labels:
-        app: accept-a-payment
+        app: {{ .Values.service.name }}
     spec:
       containers:
-      - name: accept-a-payment
+      - name: {{ .Values.service.name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:

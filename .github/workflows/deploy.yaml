@@ -25,14 +25,19 @@ jobs:
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build and Push Image
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: |
           export SHORT_TAG=$(echo "${{ github.sha }}" | cut -c1-8)
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_TAG
+          docker buildx build --platform linux/amd64,linux/arm64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_TAG --push .
           echo "image_tag=$SHORT_TAG" >> $GITHUB_OUTPUT
 
   deploy:
@@ -55,8 +60,9 @@ jobs:
 
       - name: Update Kubernetes Deployment
         run: |
+          export SHORT_TAG=$(echo "${{ github.sha }}" | cut -c1-8)
           aws eks update-kubeconfig --region us-east-1 --name ${{ secrets.EKS_CLUSTER_NAME }}
           helm upgrade --install accept-a-payment ./kubernetes \
             --namespace frontend-domain \
-            --set image.tag=${{ needs.build.outputs.image_tag }} \
+            --set image.tag=$SHORT_TAG \
             --set image.repository=${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}
