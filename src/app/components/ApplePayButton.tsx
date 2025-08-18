@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import './ApplePay.css';
+import './ApplePayButton.css';
 import { useCart } from '@/app/context/CartContext';
-import { applePayCode } from './inspector/code/ApplePayCode';
+import { applePayButtonCode } from './inspector/code/ApplePayButtonCode';
 
 interface ApplePayPaymentRequest {
   countryCode: string;
@@ -201,7 +201,7 @@ const ApplePay: React.FC<ApplePayProps> = ({
       className="w-full" 
       data-inspectable 
       data-component="ApplePay" 
-      data-code={applePayCode}
+      data-code={applePayButtonCode}
     >
       <div className="apple-pay-button" onClick={startApplePaySession} />
     </div>

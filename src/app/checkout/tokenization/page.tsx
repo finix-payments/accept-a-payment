@@ -6,7 +6,7 @@ import { useCart } from '@/app/context/CartContext';
 import PaymentForm from '../../components/PaymentForm';
 import ShippingAddressForm from '../../components/ShippingAddressForm';
 import GooglePayButton from '../../components/GooglePayButton';
-import ApplePay from '../../components/ApplePay';
+import ApplePayButton from '../../components/ApplePayButton';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -181,7 +181,7 @@ export default function TokenizationPage() {
               disabled={isProcessing}
             />
 
-            <ApplePay
+            <ApplePayButton
               merchant_id="MUmfEGv5bMpSJ9k5TFRUjkmm"
               merchant_identity="ID6UfSm1d4WPiWgLYmbyeo3H"
               onPaymentSuccess={handleApplePaySuccess}

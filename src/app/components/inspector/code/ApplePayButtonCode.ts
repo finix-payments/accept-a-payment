@@ -1,7 +1,7 @@
-export const applePayCode = `'use client';
+export const applePayButtonCode = `'use client';
 
 import React from 'react';
-import './ApplePay.scss';
+import './ApplePayButton.scss';
 import { useCart } from '@/app/context/CartContext';
 
 interface ApplePayProps {
@@ -14,7 +14,7 @@ interface ApplePayProps {
   onPaymentError?: (error: string) => void;
 }
 
-const ApplePay: React.FC<ApplePayProps> = ({
+const ApplePayButton: React.FC<ApplePayProps> = ({
   merchant_id,
   merchant_identity,
   recurringType,
@@ -118,4 +118,4 @@ const ApplePay: React.FC<ApplePayProps> = ({
   );
 };
 
-export default ApplePay;`;
+export default ApplePayButton;`;
