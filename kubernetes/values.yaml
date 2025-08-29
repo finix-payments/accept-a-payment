@@ -14,21 +14,25 @@ service:
 resources:
   requests:
     cpu: 250m
-    memory: 500Mi
+    memory: 512Mi
   limits:
-    cpu: 250m
-    memory: 500Mi
+    cpu: 500m
+    memory: 1Gi
 
 readinessProbe:
   path: /
   port: 3000
   initialDelaySeconds: 5
   periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 3
 
 livenessProbe:
   path: /
   port: 3000
   initialDelaySeconds: 15
   periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 3
 
 namespace: frontend-domain
