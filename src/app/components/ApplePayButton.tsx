@@ -201,7 +201,7 @@ const ApplePay: React.FC<ApplePayProps> = ({
       data-component="ApplePay"
       data-code={applePayButtonCode}
     >
-      {/* @ts-ignore */}
+      {/* @ts-expect-error Apple Pay custom element not in TypeScript definitions */}
       <apple-pay-button
         buttonstyle="black"
         type="buy"
