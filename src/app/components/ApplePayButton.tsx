@@ -183,8 +183,6 @@ const ApplePay: React.FC<ApplePayProps> = ({
       total: { label: 'Finix Store', amount: totalString.substring(1) },
     };
 
-    console.log('startapplepaysession');
-
     const session = new window.ApplePaySession(3, request);
     session.begin();
 
@@ -203,6 +201,7 @@ const ApplePay: React.FC<ApplePayProps> = ({
       data-component="ApplePay"
       data-code={applePayButtonCode}
     >
+      {/* @ts-ignore */}
       <apple-pay-button
         buttonstyle="black"
         type="buy"
