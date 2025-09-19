@@ -197,13 +197,18 @@ const ApplePay: React.FC<ApplePayProps> = ({
   }
 
   return (
-    <div 
-      className="w-full" 
-      data-inspectable 
-      data-component="ApplePay" 
+    <div
+      className="w-full"
+      data-inspectable
+      data-component="ApplePay"
       data-code={applePayButtonCode}
     >
-      <div className="apple-pay-button" onClick={startApplePaySession} />
+      <apple-pay-button
+        buttonstyle="black"
+        type="buy"
+        locale="en-US"
+        onclick={startApplePaySession}
+      />
     </div>
   );
 };
