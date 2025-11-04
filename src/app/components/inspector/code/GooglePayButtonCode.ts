@@ -38,6 +38,15 @@ export default function GooglePayButton({
 
   return (
     <div className="mt-4" data-inspectable data-component="GooglePayButton" data-code={googlePayButtonCode}>
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or pay with</span>
+        </div>
+      </div>
+      
       <div className="mt-4 w-full">
         <GooglePayButtonReact
           environment="TEST"
@@ -55,13 +64,13 @@ export default function GooglePayButton({
                   type: 'PAYMENT_GATEWAY',
                   parameters: {
                     gateway: 'finix',
-                    gatewayMerchantId: 'ID12345' // Identity ID from Finix
+                    gatewayMerchantId: 'ID12345'
                   }
                 }
               }
             ],
             merchantInfo: {
-              merchantId: 'GOOGMERCHID', // Merchant ID from Google
+              merchantId: 'ID12345',
               merchantName: 'Finix Store'
             },
             transactionInfo: {
@@ -73,8 +82,6 @@ export default function GooglePayButton({
           onLoadPaymentData={handlePaymentAuthorized}
           onError={handleError}
           existingPaymentMethodRequired={false}
-          style={{width: 250, height: 45}}
-          buttonSizeMode="fill"
         />
       </div>
     </div>
