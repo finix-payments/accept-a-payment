@@ -56,6 +56,17 @@ This method embeds the Finix Tokenization Form directly in the website. The flow
 5. Token is sent to our API to process the payment
 6. Customer sees success/failure message
 
+### 3. Finix Apple Pay
+
+For Apple Pay Button, if you want to test this locally, you
+must use ngrokg to tunnel the local server to a public URL.
+
+`brew install ngrok`
+
+Make sure you're running the app `npm run dev`.
+
+Then in a new terminal window `ngrok http 3001`.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

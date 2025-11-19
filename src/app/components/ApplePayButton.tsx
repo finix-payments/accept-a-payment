@@ -24,8 +24,12 @@ export default function ApplePayButton({
 
 
   useEffect(() => {
-    if (window.ApplePaySession) {
-      setIsApplePayAvailable(window.ApplePaySession.canMakePayments());
+    if (typeof window !== 'undefined' && window.ApplePaySession) {
+      try {
+        setIsApplePayAvailable(window.ApplePaySession.canMakePayments());
+      } catch (e) {
+        console.error('Error checking Apple Pay availability:', e);
+      }
     }
   }, []);
 
