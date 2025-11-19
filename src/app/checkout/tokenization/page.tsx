@@ -6,6 +6,7 @@ import { useCart } from '@/app/context/CartContext';
 import PaymentForm from '../../components/PaymentForm';
 import ShippingAddressForm from '../../components/ShippingAddressForm';
 import GooglePayButton from '../../components/GooglePayButton';
+import ApplePayButton from '../../components/ApplePayButton';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -68,6 +69,21 @@ export default function TokenizationPage() {
 
   const handleGooglePayError = (error: Error) => {
     console.error('Google Pay payment failed:', error);
+  };
+
+  const handleApplePaySuccess = async (transferId: string, amount: number) => {
+    setIsProcessing(true);
+    try {
+      router.push(`/checkout/success?transferId=${transferId}&amount=${amount}`);
+    } catch (err) {
+      console.error('Apple Pay payment redirect failed:', err);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleApplePayError = (error: Error) => {
+    console.error('Apple Pay payment failed:', error);
   };
 
   return (
@@ -154,13 +170,34 @@ export default function TokenizationPage() {
             </div>
           </div>
 
-          {/* Google Pay Button */}
+          
           <div className="mt-6">
-            <GooglePayButton
-              onPaymentSuccess={handleGooglePaySuccess}
-              onPaymentError={handleGooglePayError}
-              disabled={isProcessing}
-            />
+            <div className="relative mb-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400">Express Checkout</span>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              {/* Google Pay Button */}
+              <div className="w-full">
+                <GooglePayButton
+                  onPaymentSuccess={handleGooglePaySuccess}
+                  onPaymentError={handleGooglePayError}
+                  disabled={isProcessing}
+                />
+              </div>
+              {/* Apple Pay Button */}
+              <div className="w-full">
+                <ApplePayButton
+                  onPaymentSuccess={handleApplePaySuccess}
+                  onPaymentError={handleApplePayError}
+                  disabled={isProcessing}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

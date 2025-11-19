@@ -26,3 +26,24 @@ body {
 pre[class*="language-"] {
   margin: 0 !important;
 }
+
+apple-pay-button {
+  --apple-pay-button-width: 150px;
+  --apple-pay-button-height: 30px;
+  --apple-pay-button-border-radius: 3px;
+  --apple-pay-button-padding: 0px 0px;
+  --apple-pay-button-box-sizing: border-box;
+}
+
+.google-pay-button-container {
+  width: 100% !important;
+}
+
+.google-pay-button-container > div {
+  width: 100% !important;
+}
+
+.gpay-card-info-container {
+  width: 100% !important;
+  min-width: auto !important;
+}
