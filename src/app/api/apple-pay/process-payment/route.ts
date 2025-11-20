@@ -55,16 +55,14 @@ export async function POST(request: NextRequest) {
 
     const identity = await identityResponse.json();
 
-    const finixAddress: Record<string, string> = {};
-    
-    if (addressData) {
-      if (addressData.line1) finixAddress.line1 = addressData.line1;
-      if (addressData.line2) finixAddress.line2 = addressData.line2;
-      if (addressData.city) finixAddress.city = addressData.city;
-      if (addressData.region) finixAddress.region = addressData.region;
-      if (addressData.postal_code) finixAddress.postal_code = addressData.postal_code;
-      if (addressData.country) finixAddress.country = addressData.country;
-    }
+    const finixAddress: Record<string, string> | undefined = addressData ? {
+      line1: addressData.line1 || '',
+      line2: addressData.line2 || '',
+      city: addressData.city || '',
+      region: addressData.region || '',
+      postal_code: addressData.postal_code || '',
+      country: addressData.country || '',
+    } : undefined;
 
     const paymentInstrumentBody: Record<string, unknown> = {
       third_party_token: paymentToken,
@@ -77,7 +75,7 @@ export async function POST(request: NextRequest) {
       paymentInstrumentBody.name = name;
     }
 
-    if (Object.keys(finixAddress).length > 0) {
+    if (finixAddress && Object.keys(finixAddress).length > 0) {
       paymentInstrumentBody.address = finixAddress;
     }
 
