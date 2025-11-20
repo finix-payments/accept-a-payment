@@ -99,7 +99,81 @@ declare global {
       };
     };
     googlePayClient?: GooglePayClient;
+    ApplePaySession?: typeof ApplePaySession;
   }
+}
+
+export interface ApplePayPaymentRequest {
+  countryCode: string;
+  currencyCode: string;
+  merchantCapabilities: string[];
+  supportedNetworks: string[];
+  total: {
+    label: string;
+    amount: string;
+  };
+  requiredBillingContactFields?: string[];
+}
+
+export interface ApplePayBillingContact {
+  givenName?: string;
+  familyName?: string;
+  addressLines?: string[];
+  locality?: string;
+  administrativeArea?: string;
+  postalCode?: string;
+  countryCode?: string;
+  country?: string;
+}
+
+export interface ApplePayPaymentToken {
+  paymentMethod: {
+    displayName: string;
+    network: string;
+    type: string;
+  };
+  transactionIdentifier: string;
+  paymentData: {
+    data: string;
+    signature: string;
+    header: {
+      publicKeyHash: string;
+      ephemeralPublicKey: string;
+      transactionId: string;
+    };
+    version: string;
+  };
+}
+
+export interface ApplePayPayment {
+  token: ApplePayPaymentToken;
+  billingContact?: ApplePayBillingContact;
+}
+
+export interface ApplePayValidateMerchantEvent {
+  validationURL: string;
+}
+
+export interface ApplePayPaymentAuthorizedEvent {
+  payment: ApplePayPayment;
+}
+
+export declare class ApplePaySession {
+  static readonly STATUS_SUCCESS: number;
+  static readonly STATUS_FAILURE: number;
+  static readonly SUPPORTED_VERSION: number;
+  static canMakePayments(): boolean;
+  static canMakePaymentsWithActiveCard(merchantIdentifier: string): boolean;
+  
+  constructor(version: number, request: ApplePayPaymentRequest);
+  
+  begin(): void;
+  completeMerchantValidation(merchantSession: unknown): void;
+  completePayment(status: number): void;
+  
+  onvalidatemerchant: ((event: ApplePayValidateMerchantEvent) => void) | null;
+  onpaymentauthorized: ((event: ApplePayPaymentAuthorizedEvent) => void) | null;
+  oncancel: (() => void) | null;
 }
 
 export interface FinixForm {
