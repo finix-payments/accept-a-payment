@@ -1,0 +1,35 @@
+name: Terraform Plan
+on:
+  schedule:
+    - cron: '30 11 * * 0,3'  # 11:30 AM UTC on Sunday and Wednesday
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to plan (qa, sb, prod, all)'
+        required: true
+        type: choice
+        options:
+          - qa
+          - sb
+          - prod
+          - all
+        default: 'qa'
+      jira_ticket:
+        description: 'RM ticket associated with plan (required for SB/Prod)'
+        required: false
+        type: string
+  pull_request:
+    paths:
+      - 'terraform/**'
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  terraform-plan:
+    uses: finix-payments/finix-github-actions/.github/workflows/terraform-plan-all.yaml@main
+    with:
+      environment: ${{ inputs.environment || 'all' }}
+      jira_ticket: ${{ inputs.jira_ticket || '' }}
+    secrets: inherit
