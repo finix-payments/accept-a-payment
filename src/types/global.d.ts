@@ -87,9 +87,7 @@ export interface TokenError {
 declare global {
   interface Window {
     Finix?: {
-      TokenForm: (id: string, options: FinixFormOptions) => FinixForm;
-      CardTokenForm: (id: string, options: FinixFormOptions) => FinixForm;
-      BankTokenForm: (id: string, options: FinixFormOptions) => FinixForm;
+      PaymentForm: (id: string, env: string, application: string, options: FinixFormOptions) => FinixForm;
     };
     google?: {
       payments?: {
@@ -177,7 +175,7 @@ export declare class ApplePaySession {
 }
 
 export interface FinixForm {
-  submit: (env: string, key: string, callback: (err: TokenError | null, res: TokenResponse) => void) => void;
+  submit: (callback: (err: (TokenError | null), res: TokenResponse) => void) => void;
 }
 
 export interface TokenResponse {
