@@ -180,7 +180,7 @@ export default function TokenizationPage() {
                 <span className="px-2 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400">Express Checkout</span>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex-col gap-2">
               {/* Google Pay Button */}
               <div className="w-full">
                 <GooglePayButton

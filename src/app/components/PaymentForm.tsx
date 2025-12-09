@@ -9,8 +9,8 @@ import { paymentFormCode } from './inspector/code/PaymentFormCode';
 export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormProps) {
   const finixForm = useRef<FinixForm | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [formHasErrors, setFormHasErrors] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [isFormValid, setIsFormValid] = useState(false);
   const router = useRouter();
   const { totalPrice } = useCart();
   const subtotal = totalPrice;
@@ -24,30 +24,13 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
     if (Finix && !finixForm.current) {
       {/* Finix Tokenization Options - https://finix.com/docs/guides/payments/online-payments/payment-details/token-forms/ */}
       const options = {
-        // optional fields to require billing address collection if needed
-        showAddress: true,
-        requiredFields: ['address_line1', 'city', 'state', 'postal_code'],
-        // onUpdate function required when using custom submit buttons to properly enable/disable them
+        // optional fields to show billing address collection if needed
         onUpdate: (state: FormState, binInformation: BinInformation, hasErrors: boolean) => {
-          setIsFormValid(!hasErrors);
-        },
-        // optional styles
-        styles: {
-          default: {
-            border: "1px solid #d1d5dc",
-            borderRadius: "0.375rem",
-            padding: "0.5rem",
-            fontSize: "1rem",
-            fontWeight: "400",
-            lineHeight: "1.25rem",
-            color: "#091e42",
-            backgroundColor: "#ffffff",
-            boxShadow: "0 1px 0 rgba(9,30,66,.08)",
-          },
+          setFormHasErrors(hasErrors);
         },
       };
 
-      finixForm.current = Finix.CardTokenForm("payment-form", options);
+      finixForm.current = Finix.PaymentForm("payment-form", "sandbox", "APc9vhYcPsRuTSpKD9KpMtPe", options);
     }
   }, []);
 
@@ -97,7 +80,7 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
       setIsProcessing(true);
 
       const token = await new Promise((resolve, reject) => {
-        finixForm.current?.submit("sandbox", "APc9vhYcPsRuTSpKD9KpMtPe", function (err, res) {
+        finixForm.current?.submit(function (err, res) {
           if (err) reject(err);
           else resolve(res.data.id);
         });
@@ -105,8 +88,8 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
 
       handleTokenReceived(token as string);
     } catch (err) {
-      setIsProcessing(false);
       setError('Tokenization failed: ' + (err as Error).message);
+      setIsProcessing(false);
     }
   };
 
@@ -123,14 +106,14 @@ export default function PaymentForm({ onSuccess, shippingAddress }: PaymentFormP
       
       {/* Finix Tokenization iframe will be loaded here */}
       <div id="payment-form" />
-      
+
       {/* Custom Submit Button */}
       <div className="mt-6">
         <button
           onClick={handleSubmit}
-          disabled={isProcessing || !isFormValid}
+          disabled={isProcessing || formHasErrors}
           className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-            isProcessing || !isFormValid ? 'bg-blue-400 dark:bg-blue-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-800 cursor-pointer'
+            (isProcessing || formHasErrors) ? 'bg-blue-400 dark:bg-blue-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-800 cursor-pointer'
           } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800`}
         >
           {isProcessing ? (

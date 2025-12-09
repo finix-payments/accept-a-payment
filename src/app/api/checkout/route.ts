@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const total = subtotal + tax;
 
     const isDev = process.env.NODE_ENV === 'development';
-    const baseUrl = isDev ? 'http://localhost:3000' : 'https://finixsamplestore.com';
+    const baseUrl = isDev ? 'http://localhost:3001' : 'https://finixsamplestore.com';
 
     // Construct the checkout request
     const checkoutRequest = {
